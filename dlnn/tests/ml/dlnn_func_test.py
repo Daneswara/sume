@@ -29,8 +29,8 @@ from dlnn.util.Initializers import Unifinv
 
 inputs = Input(shape=(corpus_data.shape[-1],))
 scale = Lambda(lambda x: x * 1.0 / 300.0)(inputs)
-reshape = Reshape([1, 1, 4])(scale)
-tile = Lambda(lambda x: K.tile(x, (1, 1, 4, 1)))(reshape)
+reshape = Reshape([1, 1, 6])(scale)
+tile = Lambda(lambda x: K.tile(x, (1, 1, 6, 1)))(reshape)
 step_1_conv = layer_1_conv()(tile)
 step_2_activation = layer_2_activation()(step_1_conv)
 step_3_conv = layer_3_conv()(step_2_activation)

@@ -17,6 +17,8 @@ class Dokumen(models.Model):
     fitur2 = models.IntegerField(default=0)
     fitur3 = models.IntegerField(default=0)
     fitur4 = models.IntegerField(default=0)
+    fitur5 = models.IntegerField(default=0)
+    fitur6 = models.IntegerField(default=0)
     kualitas = models.IntegerField(default=0)
     state = models.CharField(default="In Queue", max_length=100)
 

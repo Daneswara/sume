@@ -39,7 +39,7 @@ def to_text(path):
         return text
 
 
-def calculate_feature_3(doc_id):
+def calculate_feature_34(doc_id):
     from dlnn.tests.stringmatching.TestStringMatching import calculate
     # get target document
     target = to_text(Dokumen.objects.filter(id=doc_id).first().filenya.path)
@@ -47,30 +47,40 @@ def calculate_feature_3(doc_id):
     for i in range(1, 6):  # Acuan dokumen id 1 - 5
         sources.append(to_text(Dokumen.objects.filter(id=i).first().filenya.path))
 
-    accumulation = 0
+    a1 = 0
+    a2 = 0
     for source in sources:
-        sc, lc = calculate(target, source, 3, 200, ct=5e-1)
-        accumulation += sc
+        sc1, _ = calculate(target, source, 3, 200, ct=5e-1)
+        sc2, _ = calculate(target, source, 5, 200, ct=5e-1)
+        a1 += sc1
+        a2 += sc2
         # kalo mau model rasio bisa pakai yang dibawah ini
         # accumulation += int(round(sc * 1.0 / lc))
-    return accumulation
+    return a1, a2
 
 
-def calculate_feature_4(doc_id):
+def calculate_feature_56(doc_id):
     from dlnn.tests.stringmatching.TestStringMatching import calculate
+    from dlnn.tests.stringmatching.TestWordScrapping import get_text
+    from dlnn.tests.stringmatching.TestWordScrapping import repos
     # get target document
     target = to_text(Dokumen.objects.filter(id=doc_id).first().filenya.path)
     sources = []
     for i in range(1, 6):  # Acuan dokumen id 1 - 5
-        sources.append(to_text(Dokumen.objects.filter(id=i).first().filenya.path))
+        text = get_text(repos[i])
+        if text is not None:
+            sources.append(text)
 
-    accumulation = 0
+    a1 = 0
+    a2 = 0
     for source in sources:
-        sc, lc = calculate(target, source, 5, 200, ct=5e-1)
-        accumulation += sc
+        sc1, _ = calculate(target, source, 3, 200, ct=5e-1)
+        sc2, _ = calculate(target, source, 5, 200, ct=5e-1)
+        a1 += sc1
+        a2 += sc2
         # kalo mau model rasio bisa pakai yang dibawah ini
         # accumulation += int(round(sc * 1.0 / lc))
-    return accumulation
+    return a1, a2
 
 
 @shared_task(ignore_result=True)
@@ -155,17 +165,19 @@ def proceed_document(dokumen_id):
 
     dokumen.save()
 
-    f3 = calculate_feature_3(dokumen_id)
+    f3, f4 = calculate_feature_34(dokumen_id)
     dokumen.fitur3 = f3
+    dokumen.fitur4 = f4
     dokumen.save()
 
-    f4 = calculate_feature_4(dokumen_id)
-    dokumen.fitur4 = f4
+    f5, f6 = calculate_feature_56(dokumen_id)
+    dokumen.fitur5 = f5
+    dokumen.fitur6 = f6
     dokumen.save()
 
     # Todo : masukkan fitur f[1..4] ke database
     network = dlnn.get_model()
-    result = network.predict(numpy.array([[f1, f2, f3, f4]]), batch_size=1)
+    result = network.predict(numpy.array([[f1, f2, f3, f4, f5, f6]]), batch_size=1)
     class_data = result.argmax(axis=1)[0]
     # print("Class Data {}".format(class_data))
     # Todo : masukkan class_data sebagai hasil kelas data [mappingkan dengan kelas seharusnya] [zero based indexing]

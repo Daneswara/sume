@@ -17,9 +17,9 @@ from django.http import BadHeaderError, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
-from filetransfers.api import serve_file
+# from filetransfers.api import serve_file
 # fitur
-from spellchecker import SpellChecker
+# from spellchecker import SpellChecker
 
 from app.app.forms import auth, formKelas, formUploadDokumen, formUploadData
 from app.app.utils.arrayutil import array_except, array_merge
@@ -722,21 +722,21 @@ def proses_pengujian(request):
         }
     return redirect('/pengujian')
 
-def proses_perhitungan_fitur2(dokumen_id):
-    dokumen = get_object_or_404(Dokumen, pk=dokumen_id)
-    spell = SpellChecker()
-    with open(dokumen.filenya.path, "rb") as f:
-        pdf = pdftotext.PDF(f)
-        text = "".join(pdf)
-        tokens = nltk.word_tokenize(text, preserve_line=True)
-        misspelled = spell.unknown(tokens)
-        jumlah = len(misspelled)
-        dokumen.fitur2 = jumlah
-        dokumen.save()
-        for word in misspelled:
-            print("misspelled : " + word)
-            # Get the one `most likely` answer
-            print("most likely : " + spell.correction(word))
-            # Get a list of `likely` options
-            print("likely options : ")
-            print(spell.candidates(word))
+# def proses_perhitungan_fitur2(dokumen_id):
+#     dokumen = get_object_or_404(Dokumen, pk=dokumen_id)
+#     spell = SpellChecker()
+#     with open(dokumen.filenya.path, "rb") as f:
+#         pdf = pdftotext.PDF(f)
+#         text = "".join(pdf)
+#         tokens = nltk.word_tokenize(text, preserve_line=True)
+#         misspelled = spell.unknown(tokens)
+#         jumlah = len(misspelled)
+#         dokumen.fitur2 = jumlah
+#         dokumen.save()
+#         for word in misspelled:
+#             print("misspelled : " + word)
+#             # Get the one `most likely` answer
+#             print("most likely : " + spell.correction(word))
+#             # Get a list of `likely` options
+#             print("likely options : ")
+#             print(spell.candidates(word))

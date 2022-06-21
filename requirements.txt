@@ -43,7 +43,7 @@ Keras-Preprocessing==1.0.5
 kombu==4.2.1
 Markdown==2.6.11
 nltk==3.3
-numpy==1.14.5
+numpy==1.22.0
 pandas==0.23.1
 paramiko==2.4.2
 pdftotext==2.1.0

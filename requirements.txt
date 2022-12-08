@@ -11,7 +11,7 @@ boto3==1.9.28
 botocore==1.12.28
 bz2file==0.98
 celery==4.2.1
-certifi==2018.4.16
+certifi==2022.12.7
 cffi==1.11.5
 chardet==3.0.4
 coverage==4.5.1
